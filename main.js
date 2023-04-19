@@ -1,9 +1,9 @@
-import { drawHeart } from "./modules/draw.js";
+import { drawColoredGrid } from "./modules/draw.js";
 
 const canvas = document.getElementById("myCanvas");
-canvas.width = 150;
-canvas.height = 150;
+canvas.width = 600;
+canvas.height = 600;
 
 const ctx = canvas.getContext("2d");
 
-drawSpeechBubble(ctx);
+drawColoredGrid(ctx);
