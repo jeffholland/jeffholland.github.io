@@ -13,3 +13,4 @@ if (randomNumber == 0) {
 } else {
     drawTriangle(ctx);
 }
+console.log(`random number: ${randomNumber}`);
