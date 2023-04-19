@@ -1,4 +1,4 @@
-import { drawSpeechBubble } from "./modules/draw.js";
+import { drawHeart } from "./modules/draw.js";
 
 const canvas = document.getElementById("myCanvas");
 canvas.width = 150;
