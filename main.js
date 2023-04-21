@@ -1,90 +1,80 @@
-
-
-const canvasWidth = 600;
+const canvasWidth = 800;
 const canvasHeight = 600;
 
 const canvas = document.querySelector("canvas");
 canvas.width = canvasWidth;
 canvas.height = canvasHeight;
-canvas.style.border = "1px solid black";
-canvas.style.backgroundImage = "url(./bg1.png)";
-
 const ctx = canvas.getContext("2d");
 
-const rectWidth = 10;
-const rectHeight = 10;
-let rectX;
-let rectY;
-let deltaX;
-let deltaY;
+const btnClear = document.getElementById("btnClear");
 
-document.addEventListener("keydown", (event) => {
-    switch (event.key) {
-        case "ArrowLeft":
-            deltaX = -1;
-            deltaY = 0;
-            localStorage.setItem("deltaX", deltaX);
-            localStorage.setItem("deltaY", deltaY);
-            break;
-        case "ArrowRight":
-            deltaX = 1;
-            deltaY = 0;
-            localStorage.setItem("deltaX", deltaX);
-            localStorage.setItem("deltaY", deltaY);
-            break;
-        case "ArrowUp":
-            deltaY = -1;
-            deltaX = 0;
-            localStorage.setItem("deltaX", deltaX);
-            localStorage.setItem("deltaY", deltaY);
-            break;
-        case "ArrowDown":
-            deltaY = 1;
-            deltaX = 0;
-            localStorage.setItem("deltaX", deltaX);
-            localStorage.setItem("deltaY", deltaY);
-            break;
+function clear() {
+    localStorage.clear();
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+}
+btnClear.onclick = clear;
+
+const rectSize = 20;
+const rects = [];
+let rectCounter = 0;
+
+canvas.style.border = "1px solid black";
+canvas.style.backgroundColor = "black";
+
+function restoreColoredRects() {
+    const numRects = localStorage.getItem("numRects");
+    rectCounter = numRects;
+
+    for (let i = 0; i < numRects; ++i) {
+        const x = localStorage.getItem(`x${i}`);
+        const y = localStorage.getItem(`y${i}`);
+        const r = localStorage.getItem(`r${i}`);
+        const g = localStorage.getItem(`g${i}`);
+        const b = localStorage.getItem(`b${i}`);
+        const color = [r, g, b]
+        
+        showColoredRect(x, y, color);
     }
+}
+
+if (localStorage.getItem("x0")) {
+    restoreColoredRects();
+}
+
+function showColoredRect(x, y, color) {
+    ctx.fillStyle = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+    ctx.fillRect(x - rectSize, y - rectSize, rectSize, rectSize);
+}
+
+function saveColoredRect(x, y, color) {
+    localStorage.setItem(`x${rectCounter}`, x);
+    localStorage.setItem(`y${rectCounter}`, y);
+    localStorage.setItem(`r${rectCounter}`, color[0]);
+    localStorage.setItem(`g${rectCounter}`, color[1]);
+    localStorage.setItem(`b${rectCounter}`, color[2]);
+
+    rectCounter++;
+    localStorage.setItem("numRects", rectCounter);
+}
+
+function getRandomColor() {
+    const color = [0, 0, 0];
+
+    for (let i = 0; i < color.length; ++i) {
+        color[i] = Math.floor(Math.random() * 256);
+    }
+
+    return color;
+}
+
+document.addEventListener("mousedown", (event) => {
+    const color = getRandomColor();
+    showColoredRect(event.clientX, event.clientY, color);
+    saveColoredRect(event.clientX, event.clientY, color);
 })
 
-if (localStorage.getItem("xpos")) {
-    rectX = parseInt(localStorage.getItem("xpos"));
-    rectY = parseInt(localStorage.getItem("ypos"));
-    deltaX = parseInt(localStorage.getItem("deltaX"));
-    deltaY = parseInt(localStorage.getItem("deltaY"));
-} else {
-    rectX = 0;
-    rectY = 0;
-    deltaX = 1;
-    deltaY = 0;
-}
+// function main() {
+//     window.requestAnimationFrame(main);
+// }
 
-function drawRect(x, y) {
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-    ctx.fillRect(x, y, rectWidth, rectHeight);
-    localStorage.setItem("xpos", x);
-    localStorage.setItem("ypos", y);
-}
-
-function main() {
-    drawRect(rectX, rectY);
-    rectX += deltaX;
-    rectY += deltaY;
-
-    if (rectX >= canvasWidth - rectWidth) {
-        rectX = 0;
-    }
-    if (rectX < 0) {
-        rectX = canvasWidth - rectWidth;
-    }
-    if (rectY >= canvasHeight - rectHeight) {
-        rectY = 0;
-    }
-    if (rectY < 0) {
-        rectY = canvasHeight - rectHeight;
-    }
-
-    window.requestAnimationFrame(main);
-}
-
-main();
+// main();
