@@ -14,6 +14,8 @@ let imgY = 100;
 const img = new Image();
 img.src = "./assets/player.png";
 img.onload = ctx.drawImage(img, imgX, imgY);
+console.log(img.width);
+console.log(img.height);
 
 document.addEventListener("keydown", (event) => {
     switch (event.key) {
