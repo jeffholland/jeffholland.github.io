@@ -8,25 +8,32 @@ canvas.height = canvasHeight;
 body.style.background = "black"
 const ctx = canvas.getContext("2d");
 
-// document.addEventListener("keydown", (event) => {
-//     switch (event.key) {
-//         case "ArrowLeft":
-//             break;
-//         case "ArrowRight":
-//             break;
-//         case "ArrowUp":
-//             break;
-//         case "ArrowDown":
-//             break;
-//     }
-// })
+let imgX = 100;
+let imgY = 100;
 
 const img = new Image();
 img.src = "./assets/player.png";
-img.onload = ctx.drawImage(img, 100, 100);
+img.onload = ctx.drawImage(img, imgX, imgY);
 
-// function main() {
-//     window.requestAnimationFrame(main);
-// }
+document.addEventListener("keydown", (event) => {
+    switch (event.key) {
+        case "ArrowLeft":
+            break;
+        case "ArrowRight":
+            break;
+        case "ArrowUp":
+            break;
+        case "ArrowDown":
+            break;
+    }
+})
 
-// main();
+function main() {
+    imgX += 1;
+    imgY += 1;
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    ctx.drawImage(img, imgX, imgY);
+    window.requestAnimationFrame(main);
+}
+
+main();
